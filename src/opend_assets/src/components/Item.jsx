@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { idlFactory } from "../../../declarations/nft";
 import { Principal } from "@dfinity/principal";
+import { opend } from "../../../declarations/opend";
 import Button from "./Button";
 
 function Item(props) {
@@ -53,7 +54,10 @@ function Item(props) {
   }
 
   async function sellItem(){
-    console.log("Confirm clicked")
+    console.log("Set Price: " + price);
+    const resultListing = await opend.listItem(props.id, Number(price));
+    console.log("listing:" +  resultListing)
+
   }
 
   return (
