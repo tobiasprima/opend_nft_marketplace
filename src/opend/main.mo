@@ -65,4 +65,8 @@ actor OpenD {
             return "Not your NFT"
         }
     };
+
+    public query func getOpenCanisterId(): async Principal{
+        return Principal.fromActor(OpenD);
+    }
 };

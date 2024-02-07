@@ -1,5 +1,6 @@
 export const idlFactory = ({ IDL }) => {
   return IDL.Service({
+    'getOpenCanisterId' : IDL.Func([], [IDL.Principal], ['query']),
     'getOwnedNFTs' : IDL.Func(
         [IDL.Principal],
         [IDL.Vec(IDL.Principal)],
