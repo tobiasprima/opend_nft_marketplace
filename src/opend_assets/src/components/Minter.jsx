@@ -6,7 +6,9 @@ function Minter() {
   const {register, handleSubmit} = useForm();
 
   async function onSubmit(data){
-    
+    const name = data.name;
+    const img = data.image[0];
+    const imgByteData = [...new Uint8Array(await img.arrayBuffer())]
   }
 
   return (
