@@ -40,6 +40,7 @@ function Item(props) {
   }, []);
 
   let price;
+
   function handleSell(){
     setPriceInput(<input
       placeholder="Price in DBEY"
@@ -48,7 +49,11 @@ function Item(props) {
       value={price}
       onChange={(e)=> price = e.target.value}
     />)
-    setButton(<Button handleClick={handleSell} text={"Confirm"}></Button>)
+    setButton(<Button handleClick={sellItem} text={"Confirm"}></Button>)
+  }
+
+  async function sellItem(){
+    console.log("Confirm clicked")
   }
 
   return (
