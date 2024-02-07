@@ -17,6 +17,9 @@ function Item(props) {
 
   const localHost = "http://localhost:8080/";
   const agent = new HttpAgent({host: localHost});
+  // When deploying live, remove this line below
+  agent.fetchRootKey();
+  
   let NFTActor;
 
   async function loadNFT(){
