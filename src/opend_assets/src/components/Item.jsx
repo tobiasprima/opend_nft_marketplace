@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import logo from "../../assets/logo.png";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { idlFactory } from "../../../declarations/nft";
 import { Principal } from "@dfinity/principal";
@@ -8,6 +7,7 @@ function Item(props) {
 
   const [name, setName] = useState();
   const [owner, setOwner] = useState();
+  const [img, setImg] = useState();
 
   const id = Principal.fromText(props.id);
 
@@ -21,8 +21,13 @@ function Item(props) {
     });
     const nftName = await NFTActor.getName()
     const nftOwner = await NFTActor.getOwner();
+    const imageData = await NFTActor.getContent();
+
+    const imageContent = new Uint8Array(imageData);
+    const imageUrl = URL.createObjectURL(new Blob([imageContent.buffer], {type: "image/png"}));
     setName(nftName);
     setOwner(nftOwner.toText());
+    setImg(imageUrl);
   }
 
   useEffect(()=> {
@@ -34,7 +39,7 @@ function Item(props) {
       <div className="disPaper-root disCard-root makeStyles-root-17 disPaper-elevation1 disPaper-rounded">
         <img
           className="disCardMedia-root makeStyles-image-19 disCardMedia-media disCardMedia-img"
-          src={logo}
+          src={img}
         />
         <div className="disCardContent-root">
           <h2 className="disTypography-root makeStyles-bodyText-24 disTypography-h5 disTypography-gutterBottom">
