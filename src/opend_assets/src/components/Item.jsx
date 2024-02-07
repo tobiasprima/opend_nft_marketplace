@@ -58,7 +58,8 @@ function Item(props) {
       if(originalOwner.toText() != CURRENT_USER_ID.toText()){
         setButton(<Button handleClick={handleBuy} text={"Buy"}></Button>)
       }
-      
+      const price = await opend.getListedNFTPrice(props.id);
+      setPriceLabel(<PriceLabel sellPrice={price.toString()}></PriceLabel>);
     }
   }
 
