@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { idlFactory } from "../../../declarations/nft";
 import { Principal } from "@dfinity/principal";
+import Button from "./Button";
 
 function Item(props) {
 
   const [name, setName] = useState();
   const [owner, setOwner] = useState();
   const [img, setImg] = useState();
+  const [button, setButton] = useState();
+  const [priceInput, setPriceInput] = useState();
 
   const id = props.id;
 
@@ -28,11 +31,25 @@ function Item(props) {
     setName(nftName);
     setOwner(nftOwner.toText());
     setImg(imageUrl);
+
+    setButton(<Button handleClick={handleSell} text={"Sell"}></Button>)
   }
 
   useEffect(()=> {
     loadNFT();
-  }, [])
+  }, []);
+
+  let price;
+  function handleSell(){
+    setPriceInput(<input
+      placeholder="Price in DBEY"
+      type="number"
+      className="price-input"
+      value={price}
+      onChange={(e)=> price = e.target.value}
+    />)
+    setButton(<Button handleClick={handleSell} text={"Confirm"}></Button>)
+  }
 
   return (
     <div className="disGrid-item">
@@ -48,6 +65,8 @@ function Item(props) {
           <p className="disTypography-root makeStyles-bodyText-24 disTypography-body2 disTypography-colorTextSecondary">
             Owner: {owner}
           </p>
+          {priceInput}
+          {button}
         </div>
       </div>
     </div>
