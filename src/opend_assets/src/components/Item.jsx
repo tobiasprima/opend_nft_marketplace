@@ -19,6 +19,7 @@ function Item(props) {
   const [blur, setBlur] = useState();
   const [sellStatus, setSellStatus] = useState();
   const [priceLabel, setPriceLabel]= useState();
+  const [shouldDisplay, setDisplay] = useState(true);
 
   const id = props.id;
 
@@ -81,6 +82,7 @@ function Item(props) {
        const transferResult = await opend.completePurchase(props.id, sellerId, CURRENT_USER_ID);
        console.log("Transfer: " + transferResult);
        setLoaderHidden(true);
+       setDisplay(false);
     }
   }
     
@@ -123,7 +125,7 @@ function Item(props) {
   }
 
   return (
-    <div className="disGrid-item">
+    <div style={{display: shouldDisplay ? "inLine" : "none"}} className="disGrid-item">
       <div className="disPaper-root disCard-root makeStyles-root-17 disPaper-elevation1 disPaper-rounded">
         <img
           className="disCardMedia-root makeStyles-image-19 disCardMedia-media disCardMedia-img"
