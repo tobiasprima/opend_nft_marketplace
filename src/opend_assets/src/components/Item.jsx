@@ -7,6 +7,7 @@ import { Principal } from "@dfinity/principal";
 function Item(props) {
 
   const [name, setName] = useState();
+  const [owner, setOwner] = useState();
 
   const id = Principal.fromText(props.id);
 
@@ -19,7 +20,9 @@ function Item(props) {
       canisterId: id,
     });
     const nftName = await NFTActor.getName()
+    const nftOwner = await NFTActor.getOwner();
     setName(nftName);
+    setOwner(nftOwner.toText());
   }
 
   useEffect(()=> {
@@ -38,7 +41,7 @@ function Item(props) {
             {name}<span className="purple-text"></span>
           </h2>
           <p className="disTypography-root makeStyles-bodyText-24 disTypography-body2 disTypography-colorTextSecondary">
-            Owner: sdfsdf-erw erv-sdf
+            Owner: {owner}
           </p>
         </div>
       </div>
