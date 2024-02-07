@@ -12,6 +12,9 @@ function Item(props) {
   const [img, setImg] = useState();
   const [button, setButton] = useState();
   const [priceInput, setPriceInput] = useState();
+  const [loaderHidden, setLoaderHidden] = useState(true);
+  const [blur, setBlur] = useState();
+
 
   const id = props.id;
 
@@ -19,7 +22,7 @@ function Item(props) {
   const agent = new HttpAgent({host: localHost});
   // When deploying live, remove this line below
   agent.fetchRootKey();
-  
+  // 
   let NFTActor;
 
   async function loadNFT(){
@@ -58,13 +61,21 @@ function Item(props) {
   }
 
   async function sellItem(){
+    setBlur({filter: "blur(4px)"})
+    setLoaderHidden(false);
     console.log("Set Price: " + price);
     const resultListing = await opend.listItem(props.id, Number(price));
     console.log("listing:" +  resultListing)
     if(resultListing == "Success"){
       const openDID = await opend.getOpenCanisterId();
       const transferResult = await NFTActor.transferOwnership(openDID);
-      console.log("Transfer:" + transferResult)
+      console.log("Transfer:" + transferResult);
+      if (transferResult == "Success"){
+        setLoaderHidden(true);
+        setButton();
+        setPriceInput();
+        setOwner("OpenD");
+      }
     }
   }
 
@@ -74,7 +85,14 @@ function Item(props) {
         <img
           className="disCardMedia-root makeStyles-image-19 disCardMedia-media disCardMedia-img"
           src={img}
+          style={blur}
         />
+        <div hidden={loaderHidden} className="lds-ellipsis">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
         <div className="disCardContent-root">
           <h2 className="disTypography-root makeStyles-bodyText-24 disTypography-h5 disTypography-gutterBottom">
             {name}<span className="purple-text"></span>
