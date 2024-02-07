@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/logo.png";
-import {Actor, HttpAgent } from "@dfinity/agent";
-import { idlFactory } from "../../../declarations/nft/nft.did";
+import { Actor, HttpAgent } from "@dfinity/agent";
+import { idlFactory } from "../../../declarations/nft";
 import { Principal } from "@dfinity/principal";
 
 function Item(props) {
@@ -14,7 +14,7 @@ function Item(props) {
   const agent = new HttpAgent({host: localHost});
 
   async function loadNFT(){
-    const NFTActor = new Actor.createActor(idlFactory, {
+    const NFTActor = Actor.createActor(idlFactory, {
       agent,
       canisterId: id,
     });
