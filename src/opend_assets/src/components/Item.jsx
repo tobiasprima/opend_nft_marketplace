@@ -40,7 +40,14 @@ function Item(props) {
     setOwner(nftOwner.toText());
     setImg(imageUrl);
 
-    setButton(<Button handleClick={handleSell} text={"Sell"}></Button>)
+    const nftIsListed = await opend.isListed(props.id);
+
+    if(nftIsListed){
+      setOwner("OpenD");
+      setBlur({filter: "blur(4px)"});
+    }else {
+      setButton(<Button handleClick={handleSell} text={"Sell"}></Button>)
+    }
   }
 
   useEffect(()=> {
