@@ -7,19 +7,28 @@ function Minter() {
 
   const {register, handleSubmit} = useForm();
   const [nftPrincipal, setNFTPrincipal] = useState("");
+  const [loaderHidden, setLoaderHidden] = useState(true);
 
   async function onSubmit(data){
+    setLoaderHidden(false);
     const name = data.name;
     const img = data.image[0];
     const imgByteData = [...new Uint8Array(await img.arrayBuffer())];
 
     const newNFTId = await opend.mint(imgByteData, name);
     setNFTPrincipal(newNFTId);
+    setLoaderHidden(true);
   }
 
   if(nftPrincipal == ""){
     return (
       <div className="minter-container">
+        <div hidden={loaderHidden} className="lds-ellipsis">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
         <h3 className="makeStyles-title-99 Typography-h3 form-Typography-gutterBottom">
           Create NFT
         </h3>
