@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { idlFactory } from "../../../declarations/nft";
+import { idlFactory as tokenIdlFactory } from "../../../declarations/token";
 import { Principal } from "@dfinity/principal";
 import { opend } from "../../../declarations/opend";
 import Button from "./Button";
@@ -18,6 +19,7 @@ function Item(props) {
   const [blur, setBlur] = useState();
   const [sellStatus, setSellStatus] = useState();
   const [priceLabel, setPriceLabel]= useState();
+  const [shouldDisplay, setDisplay] = useState(true);
 
   const id = props.id;
 
@@ -29,7 +31,7 @@ function Item(props) {
   let NFTActor;
 
   async function loadNFT(){
-    NFTActor = Actor.createActor(idlFactory, {
+    NFTActor = await Actor.createActor(idlFactory, {
       agent,
       canisterId: id,
     });
@@ -64,7 +66,24 @@ function Item(props) {
   }
 
   async function handleBuy(){
-    console.log("Buy is triggered");
+    console.log("Buy was triggered");
+    setLoaderHidden(false);
+    const tokenActor = await Actor.createActor(tokenIdlFactory, {
+      agent,
+      canisterId: Principal.fromText("rrkah-fqaaa-aaaaa-aaaaq-cai"), //Token's Canister ID
+    });
+
+    const sellerId = await opend.getOriginalOwner(props.id);
+    const itemPrice = await opend.getListedNFTPrice(props.id);
+
+    const result = await tokenActor.transfer(sellerId, itemPrice);
+    console.log(result);
+    if(result == "Success"){
+       const transferResult = await opend.completePurchase(props.id, sellerId, CURRENT_USER_ID);
+       console.log("Transfer: " + transferResult);
+       setLoaderHidden(true);
+       setDisplay(false);
+    }
   }
     
 
@@ -106,7 +125,7 @@ function Item(props) {
   }
 
   return (
-    <div className="disGrid-item">
+    <div style={{display: shouldDisplay ? "inLine" : "none"}} className="disGrid-item">
       <div className="disPaper-root disCard-root makeStyles-root-17 disPaper-elevation1 disPaper-rounded">
         <img
           className="disCardMedia-root makeStyles-image-19 disCardMedia-media disCardMedia-img"
